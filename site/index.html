@@ -192,6 +192,57 @@
     padding: 0 24px 40px;
     font-size: 13px;
   }
+  .btn-secondary {
+    color: var(--anamon-blue);
+    background: var(--white);
+  }
+  dialog {
+    width: min(560px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    padding: 0;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--beige);
+    color: var(--anamon-blue);
+    box-shadow: 0 12px 40px rgba(24, 48, 71, 0.25);
+  }
+  dialog::backdrop { background: rgba(24, 48, 71, 0.5); }
+  .dialog-inner { padding: 28px 24px 24px; position: relative; }
+  .dialog-inner h2 { font-size: 24px; font-weight: 500; margin: 0 0 6px; padding-right: 40px; }
+  .dialog-inner .lead { margin: 0 0 20px; font-size: 15px; }
+  .close {
+    position: absolute; top: 12px; right: 12px;
+    width: 40px; height: 40px;
+    font: inherit; font-size: 24px; line-height: 1;
+    color: var(--anamon-blue); background: transparent;
+    border: none; border-radius: var(--radius); cursor: pointer;
+  }
+  .close:focus-visible { outline: 2px solid var(--anamon-blue); }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field.full { grid-column: 1 / -1; }
+  .field label { font-size: 14px; }
+  .field .opt { color: #4f6670; }
+  .field input, .field select, .field textarea {
+    font: inherit; font-size: 16px;
+    color: var(--anamon-blue); background: var(--white);
+    border: 1px solid var(--sea-blue); border-radius: var(--radius);
+    padding: 9px 10px; width: 100%;
+  }
+  .field textarea { min-height: 96px; resize: vertical; }
+  .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+    outline: 2px solid var(--anamon-blue); outline-offset: 1px;
+  }
+  .field input[aria-invalid="true"] { border-color: #a1442f; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .privacy { font-size: 13px; margin: 16px 0 0; }
+  .form-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+  .form-status { font-size: 15px; margin: 14px 0 0; }
+  .form-status.error { color: #a1442f; }
+  .btn[disabled] { opacity: 0.6; cursor: default; }
+  @media (max-width: 520px) {
+    .form-grid { grid-template-columns: 1fr; }
+  }
   @media (max-width: 860px) {
     main { grid-template-columns: 1fr; }
     #map { height: 420px; order: -1; }
@@ -217,6 +268,64 @@
   <div class="list" id="list" role="list"></div>
   <div id="map" role="region" aria-label="Map of Anamon dealers"></div>
 </main>
+
+<dialog id="appointment" aria-labelledby="appointment-title">
+  <div class="dialog-inner">
+    <button class="close" type="button" id="appointment-close" aria-label="Close">&times;</button>
+    <h2 id="appointment-title">Book a showroom visit</h2>
+    <p class="lead">Koralenhoeve 3, 2160 Wommelgem, Belgium. Leave your details and we will contact you to confirm a time.</p>
+    <form id="appointment-form" novalidate>
+      <div class="form-grid">
+        <div class="field full">
+          <label for="f-name">Name</label>
+          <input id="f-name" name="name" autocomplete="name" maxlength="100" required>
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" maxlength="200" required>
+        </div>
+        <div class="field">
+          <label for="f-phone">Phone <span class="opt">(optional)</span></label>
+          <input id="f-phone" name="phone" type="tel" autocomplete="tel" maxlength="40">
+        </div>
+        <div class="field">
+          <label for="f-date">Preferred date <span class="opt">(optional)</span></label>
+          <input id="f-date" name="date" type="date">
+        </div>
+        <div class="field">
+          <label for="f-daypart">Part of day</label>
+          <select id="f-daypart" name="daypart">
+            <option>No preference</option>
+            <option>Morning</option>
+            <option>Afternoon</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-postcode">Postcode <span class="opt">(optional)</span></label>
+          <input id="f-postcode" name="postcode" autocomplete="postal-code" maxlength="20">
+        </div>
+        <div class="field">
+          <label for="f-country">Country <span class="opt">(optional)</span></label>
+          <input id="f-country" name="country" autocomplete="country-name" maxlength="60">
+        </div>
+        <div class="field full">
+          <label for="f-message">What would you like to see? <span class="opt">(optional)</span></label>
+          <textarea id="f-message" name="message" maxlength="2000"></textarea>
+        </div>
+        <div class="hp" aria-hidden="true">
+          <label for="f-website">Website</label>
+          <input id="f-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+      </div>
+      <p class="privacy">We use your details only to arrange your visit.</p>
+      <div class="form-actions">
+        <button class="btn" type="submit" id="appointment-submit">Send request</button>
+        <button class="btn btn-secondary" type="button" id="appointment-cancel">Cancel</button>
+      </div>
+      <p class="form-status" id="appointment-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</dialog>
 
 <footer>
   <p>Anamon is a product by Royal Botania.</p>
@@ -321,14 +430,20 @@
           card.appendChild(p);
         }
         const actions = el("div", { class: "actions" });
-        actions.appendChild(el("a", { class: "btn", href: directionsUrl(d), target: "_blank", rel: "noopener" }, "Get directions"));
+        if (d.showroom) {
+          const book = el("button", { class: "btn", type: "button" }, "Book an appointment");
+          book.addEventListener("click", openAppointment);
+          actions.appendChild(book);
+        }
+        actions.appendChild(el("a", { class: "btn" + (d.showroom ? " btn-secondary" : ""), href: directionsUrl(d), target: "_blank", rel: "noopener" }, "Get directions"));
         card.appendChild(actions);
 
         card.addEventListener("click", e => {
-          if (e.target.closest("a")) return;
+          if (e.target.closest("a, button")) return;
           select(d.id, true);
         });
         card.addEventListener("keydown", e => {
+          if (e.target !== card) return;
           if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(d.id, true); }
         });
         list.appendChild(card);
@@ -375,6 +490,67 @@
     renderList();
     fitVisible();
   }
+
+  // Showroom appointment form.
+  const dialog = document.getElementById("appointment");
+  const form = document.getElementById("appointment-form");
+  const statusEl = document.getElementById("appointment-status");
+  const submitBtn = document.getElementById("appointment-submit");
+  let opener = null;
+
+  function openAppointment(e) {
+    opener = e.currentTarget;
+    const t = new Date();
+    t.setDate(t.getDate() + 1);
+    document.getElementById("f-date").min = t.toISOString().slice(0, 10);
+    statusEl.textContent = "";
+    statusEl.className = "form-status";
+    form.hidden = false;
+    dialog.showModal();
+    document.getElementById("f-name").focus();
+  }
+
+  function closeAppointment() { dialog.close(); }
+  dialog.addEventListener("close", () => { if (opener) opener.focus(); });
+  document.getElementById("appointment-close").addEventListener("click", closeAppointment);
+  document.getElementById("appointment-cancel").addEventListener("click", closeAppointment);
+  dialog.addEventListener("click", e => { if (e.target === dialog) closeAppointment(); });
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const fields = ["f-name", "f-email"].map(id => document.getElementById(id));
+    let firstInvalid = null;
+    fields.forEach(f => {
+      const ok = f.checkValidity() && f.value.trim() !== "";
+      f.setAttribute("aria-invalid", String(!ok));
+      if (!ok && !firstInvalid) firstInvalid = f;
+    });
+    if (firstInvalid) {
+      statusEl.className = "form-status error";
+      statusEl.textContent = "Please fill in your name and a valid email address.";
+      firstInvalid.focus();
+      return;
+    }
+
+    submitBtn.disabled = true;
+    statusEl.className = "form-status";
+    statusEl.textContent = "Sending…";
+    try {
+      const r = await fetch("/api/appointment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(form)))
+      });
+      if (!r.ok) throw new Error(r.status);
+      form.reset();
+      statusEl.textContent = "Thank you. We have received your request and will contact you to confirm your visit.";
+    } catch (err) {
+      statusEl.className = "form-status error";
+      statusEl.textContent = "Your request could not be sent. Please try again later.";
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
 </script>
 </body>
 </html>
