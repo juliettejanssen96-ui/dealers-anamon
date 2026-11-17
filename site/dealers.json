@@ -1,0 +1,284 @@
+[
+  {
+    "id": "showroom",
+    "showroom": true,
+    "name": "Showroom Royal Botania and Anamon",
+    "country": "Belgium",
+    "street": "Koralenhoeve 3",
+    "postcode": "2160",
+    "city": "Wommelgem",
+    "phone": "",
+    "lat": 51.211299,
+    "lng": 4.517968
+  },
+  {
+    "name": "Ghequiere",
+    "country": "Belgium",
+    "street": "Moeskroense steenweg 244",
+    "postcode": "8511",
+    "city": "Aalbeke",
+    "phone": "+32 56 41 29 65",
+    "lat": 50.767846,
+    "lng": 3.224411
+  },
+  {
+    "name": "Bourbon-Sleeckx",
+    "country": "Belgium",
+    "street": "Turnhoutsebaan 217",
+    "postcode": "2970",
+    "city": "Schilde",
+    "phone": "+32 3 383 06 69",
+    "lat": 51.24207,
+    "lng": 4.584909
+  },
+  {
+    "name": "Meubili",
+    "country": "Belgium",
+    "street": "Fort St Donaas 2",
+    "postcode": "8340",
+    "city": "Damme-Lapscheure",
+    "phone": "+32 50 60 40 14",
+    "lat": 51.289882,
+    "lng": 3.343733
+  },
+  {
+    "name": "Van Praet",
+    "country": "Belgium",
+    "street": "Waverstraat 25",
+    "postcode": "9310",
+    "city": "Moorsel",
+    "phone": "+32 53 70 27 61",
+    "lat": 50.94415,
+    "lng": 4.098794
+  },
+  {
+    "name": "Hanolux",
+    "country": "Belgium",
+    "street": "Steenweg op Zevendonk 191-195",
+    "postcode": "2300",
+    "city": "Turnhout",
+    "phone": "+32 14 41 76 74",
+    "lat": 51.303006,
+    "lng": 4.951278
+  },
+  {
+    "name": "Cockaert Design",
+    "country": "Belgium",
+    "street": "Ossegemstraat 12 & 29",
+    "postcode": "1860",
+    "city": "Meise",
+    "phone": "+32 496 26 12 47",
+    "lat": 50.957369,
+    "lng": 4.316154
+  },
+  {
+    "name": "t Hooft",
+    "country": "Belgium",
+    "street": "Moortselputstraat 1",
+    "postcode": "9031",
+    "city": "Drongen",
+    "phone": "+32 9 282 31 22",
+    "lat": 51.037094,
+    "lng": 3.622051
+  },
+  {
+    "name": "Ernst Baas",
+    "country": "Netherlands",
+    "street": "Henegouwerweg 113",
+    "postcode": "2741 JZ",
+    "city": "Waddinxveen",
+    "phone": "+31 182 634 742",
+    "lat": 52.030893,
+    "lng": 4.66104
+  },
+  {
+    "name": "Van Beem",
+    "country": "Netherlands",
+    "street": "IJweg 177A",
+    "postcode": "1161 EW",
+    "city": "Zwanenburg",
+    "phone": "+31 20 497 4662",
+    "lat": 52.371565,
+    "lng": 4.746107
+  },
+  {
+    "name": "Kerkhof Laren",
+    "country": "Netherlands",
+    "street": "Naarderstraat 12-14",
+    "postcode": "1251 BB",
+    "city": "Laren (T Gooi)",
+    "phone": "+31 35 539 5302",
+    "lat": 52.257704,
+    "lng": 5.223792
+  },
+  {
+    "name": "Buxus Design",
+    "country": "France",
+    "street": "22 Rue Mably",
+    "postcode": "33000",
+    "city": "Bordeaux",
+    "phone": "+33 6 74 73 90 54",
+    "lat": 44.843954,
+    "lng": -0.577315
+  },
+  {
+    "name": "Voltex",
+    "country": "France",
+    "street": "7 Rue Gaye Marie",
+    "postcode": "31300",
+    "city": "Toulouse",
+    "phone": "+33 5 34 30 91 19",
+    "lat": 43.603157,
+    "lng": 1.358655
+  },
+  {
+    "name": "SAS AED",
+    "country": "France",
+    "street": "117 Route de Grenoble",
+    "postcode": "69800",
+    "city": "Saint Priest",
+    "phone": "+33 4 72 89 70 23",
+    "lat": 45.708458,
+    "lng": 4.981923
+  },
+  {
+    "name": "Mathes",
+    "country": "Germany",
+    "street": "Büchel 29-31",
+    "postcode": "52062",
+    "city": "Aachen",
+    "phone": "+49 241 4703010",
+    "lat": 50.775947,
+    "lng": 6.085725
+  },
+  {
+    "name": "BE-RO-MA Gmbh Meisterbetrieb",
+    "country": "Germany",
+    "street": "Burgherrenstr. 11",
+    "postcode": "12101",
+    "city": "Berlin",
+    "phone": "+49 30 84112457",
+    "lat": 52.484837,
+    "lng": 13.383912
+  },
+  {
+    "name": "Idormo AG",
+    "country": "Switzerland",
+    "street": "Oltnerstrasse 93",
+    "postcode": "4663",
+    "city": "Aarburg",
+    "phone": "+41 62 751 52 52",
+    "lat": 47.3324,
+    "lng": 7.905742
+  },
+  {
+    "name": "Artopia S.A.",
+    "country": "Switzerland",
+    "street": "Rue du Rhône 65",
+    "postcode": "1204",
+    "city": "Genève",
+    "phone": "+41 22 786 80 02",
+    "lat": 46.202739,
+    "lng": 6.15483
+  },
+  {
+    "name": "2M Garden",
+    "country": "Italy",
+    "street": "Via Statale 133",
+    "postcode": "23807",
+    "city": "Merate",
+    "phone": "+39 039 508731",
+    "lat": 45.708226,
+    "lng": 9.407961
+  },
+  {
+    "name": "Lorusso Arredamenti SRL",
+    "country": "Italy",
+    "street": "Via Napoli 71",
+    "postcode": "76123",
+    "city": "Andria",
+    "phone": "+39 0883 594130",
+    "lat": 41.231862,
+    "lng": 16.300304
+  },
+  {
+    "name": "Design Pergola",
+    "country": "Greece",
+    "street": "Kifisias Avenue 192, N. Psihico",
+    "postcode": "15451",
+    "city": "Athens",
+    "phone": "+30 21 0672 8408",
+    "lat": 38.001293,
+    "lng": 23.773106
+  },
+  {
+    "name": "Royal Botania Inc",
+    "country": "USA",
+    "street": "200 Lexington Avenue, suite 808",
+    "postcode": "10016",
+    "city": "New York City",
+    "phone": "+1 212-334-5045",
+    "lat": 40.745643,
+    "lng": -73.980691
+  },
+  {
+    "name": "Indian Ocean Trading",
+    "country": "UK",
+    "street": "155-163 Balham Hill",
+    "postcode": "SW12 9DJ",
+    "city": "London",
+    "phone": "+44 20 8675 4808",
+    "lat": 51.448274,
+    "lng": -0.148109
+  },
+  {
+    "name": "Exterior Concept",
+    "country": "Mexico",
+    "street": "Julio Verne 19, Col. Polanco Chapultepec",
+    "postcode": "11560",
+    "city": "Mexico City",
+    "phone": "",
+    "lat": 19.427728,
+    "lng": -99.19707
+  },
+  {
+    "name": "OutdoorPlus SL",
+    "country": "Spain",
+    "street": "Avenida Europa 49",
+    "postcode": "03720",
+    "city": "Benissa",
+    "phone": "+34 965 74 72 86",
+    "lat": 38.720747,
+    "lng": 0.061512
+  },
+  {
+    "name": "Lemone Europe",
+    "country": "Poland",
+    "street": "ul. Kaskadowa 15B",
+    "postcode": "43-382",
+    "city": "Bielsko-Biala",
+    "phone": "+48 505 060 760",
+    "lat": 49.801052,
+    "lng": 18.990116
+  },
+  {
+    "name": "ECC",
+    "country": "New Zealand",
+    "street": "39 Nugent Street, Grafton",
+    "postcode": "1023",
+    "city": "Auckland",
+    "phone": "+64 9 379 9680",
+    "lat": -36.866566,
+    "lng": 174.763289
+  },
+  {
+    "name": "Parterre Garden",
+    "country": "Australia",
+    "street": "1591A Botany Road",
+    "postcode": "2019",
+    "city": "Botany NSW",
+    "phone": "+61 493 332 568",
+    "lat": -33.953054,
+    "lng": 151.202191
+  }
+]

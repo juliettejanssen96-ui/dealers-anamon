@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Find the Anamon showroom in Wommelgem and the Anamon dealers near you.">
+<title>Find an Anamon near you</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w==" crossorigin="anonymous">
+<style>
+  :root {
+    --anamon-blue: #183047;
+    --beige: #f7f6f2;
+    --white: #ffffff;
+    --ochre-yellow: #b78859;
+    --sea-blue: #819ea8;
+    --light-blue: #d9e4e7;
+    --radius: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --beige: #f7f6f2; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--beige);
+    color: var(--anamon-blue);
+    font-family: Moderat, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0;
+    min-height: 100vh;
+  }
+  header {
+    padding: 28px 24px 8px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .wordmark {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin: 0 0 24px;
+  }
+  h1 {
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 1.15;
+    margin: 0 0 12px;
+  }
+  .intro {
+    font-family: "Moderat Serif", Georgia, serif;
+    font-weight: 300;
+    font-size: 19px;
+    max-width: 640px;
+    margin: 0 0 24px;
+  }
+  .intro em { font-style: italic; }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px 0;
+    border-top: 1px solid var(--sea-blue);
+    border-bottom: 1px solid var(--sea-blue);
+    margin-bottom: 20px;
+  }
+  .chip {
+    font: inherit;
+    font-size: 14px;
+    color: var(--anamon-blue);
+    background: var(--light-blue);
+    border: 1px solid var(--light-blue);
+    border-radius: 999px;
+    padding: 6px 14px;
+    cursor: pointer;
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--anamon-blue);
+    color: var(--white);
+    border-color: var(--anamon-blue);
+  }
+  .chip:focus-visible, .btn:focus-visible, .item:focus-visible {
+    outline: 2px solid var(--anamon-blue);
+    outline-offset: 2px;
+  }
+  .count {
+    font-size: 14px;
+    margin: 0 0 12px;
+  }
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+    display: grid;
+    grid-template-columns: minmax(280px, 380px) 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .list {
+    max-height: 640px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    background: var(--white);
+    border: 1px solid var(--sea-blue);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+  .item[aria-current="true"] {
+    border-color: var(--anamon-blue);
+    box-shadow: inset 3px 0 0 var(--anamon-blue);
+  }
+  .item.showroom { background: var(--light-blue); }
+  .item .name {
+    font-size: 17px;
+    font-weight: 500;
+    margin: 0 0 4px;
+  }
+  .item .label {
+    display: inline-block;
+    font-size: 12px;
+    color: var(--anamon-blue);
+    border-left: 3px solid var(--ochre-yellow);
+    padding-left: 6px;
+    margin-bottom: 6px;
+  }
+  .item .address, .item .phone {
+    font-size: 15px;
+    margin: 0;
+  }
+  .item .actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-block;
+    font: inherit;
+    font-size: 14px;
+    color: var(--white);
+    background: var(--anamon-blue);
+    border: 1px solid var(--anamon-blue);
+    border-radius: var(--radius);
+    padding: 8px 14px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .phone a { color: var(--anamon-blue); }
+  #map {
+    height: 640px;
+    width: 100%;
+    border: 1px solid var(--sea-blue);
+    border-radius: var(--radius);
+    background: var(--light-blue);
+  }
+  .empty {
+    padding: 24px;
+    background: var(--white);
+    border: 1px solid var(--sea-blue);
+    border-radius: var(--radius);
+  }
+  .leaflet-container a { color: var(--anamon-blue); }
+  .marker-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--anamon-blue);
+    border: 2px solid var(--white);
+    box-sizing: border-box;
+  }
+  .marker-dot.showroom {
+    background: var(--ochre-yellow);
+    width: 18px;
+    height: 18px;
+  }
+  .marker-dot.is-current {
+    outline: 3px solid var(--ochre-yellow);
+    outline-offset: 2px;
+  }
+  footer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 40px;
+    font-size: 13px;
+  }
+  @media (max-width: 860px) {
+    main { grid-template-columns: 1fr; }
+    #map { height: 420px; order: -1; }
+    .list { max-height: none; overflow: visible; }
+    h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="wordmark">ANAMON</p>
+  <h1>Find an Anamon near you.</h1>
+  <p class="intro">Visit our showroom in Wommelgem, or see <em>Anamon</em> in person at one of our dealers. Choose a country to see the locations nearby.</p>
+</header>
+
+<header style="padding-top:0">
+  <div class="filters" role="group" aria-label="Filter by country" id="filters"></div>
+  <p class="count" id="count" aria-live="polite"></p>
+</header>
+
+<main>
+  <div class="list" id="list" role="list"></div>
+  <div id="map" role="region" aria-label="Map of Anamon dealers"></div>
+</main>
+
+<footer>
+  <p>Anamon is a product by Royal Botania.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg==" crossorigin="anonymous"></script>
+<script>
+  // Source: dealer list on shop.anamon.be/dealers, plus the Royal Botania and Anamon showroom.
+  // Dealer data lives in dealers.json, so it can be updated without editing this page.
+  // Coordinates were looked up from each address. Verify before publishing.
+  let DEALERS = [], countries = [], state, map, markers = {};
+  fetch("dealers.json")
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(data => { DEALERS = data; init(); })
+    .catch(() => {
+      document.getElementById("count").textContent = "The locations could not be loaded. Please try again later.";
+    });
+
+  function init() {
+    // Give every dealer an id, in list order.
+    DEALERS.forEach((d, i) => { d.id = d.id || ("d" + i); });
+
+    countries = [...new Set(DEALERS.map(d => d.country))].sort((a, b) => a.localeCompare(b));
+    state = { country: "all", selected: null };
+
+    map = L.map("map", { scrollWheelZoom: false }).setView([50.5, 8], 4);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+
+    function markerIcon(d, current) {
+      const cls = "marker-dot" + (d.showroom ? " showroom" : "") + (current ? " is-current" : "");
+      const size = d.showroom ? 18 : 14;
+      return L.divIcon({ className: "", html: '<div class="' + cls + '"></div>', iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
+    }
+
+    DEALERS.forEach(d => {
+      const m = L.marker([d.lat, d.lng], { icon: markerIcon(d, false), title: d.name, keyboard: true });
+      m.on("click", () => select(d.id, false));
+      markers[d.id] = m;
+    });
+
+    function el(tag, attrs, text) {
+      const e = document.createElement(tag);
+      if (attrs) Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v));
+      if (text !== undefined) e.textContent = text;
+      return e;
+    }
+
+    function directionsUrl(d) {
+      return "https://www.google.com/maps/dir/?api=1&destination=" + d.lat + "," + d.lng;
+    }
+
+    function visible() {
+      return DEALERS.filter(d => state.country === "all" || d.country === state.country);
+    }
+
+    function renderFilters() {
+      const box = document.getElementById("filters");
+      box.innerHTML = "";
+      const all = ["all", ...countries];
+      all.forEach(c => {
+        const b = el("button", { class: "chip", type: "button", "aria-pressed": String(state.country === c) }, c === "all" ? "All countries" : c);
+        b.addEventListener("click", () => {
+          state.country = c;
+          state.selected = null;
+          renderFilters();
+          renderList();
+          fitVisible();
+        });
+        box.appendChild(b);
+      });
+    }
+
+    function renderList() {
+      const list = document.getElementById("list");
+      list.innerHTML = "";
+      const items = visible();
+      const nCountries = new Set(items.map(d => d.country)).size;
+      document.getElementById("count").textContent =
+        items.length + (items.length === 1 ? " location" : " locations") +
+        " in " + nCountries + (nCountries === 1 ? " country" : " countries");
+
+      if (items.length === 0) {
+        list.appendChild(el("div", { class: "empty" }, "No locations in this country yet."));
+      }
+
+      items.forEach(d => {
+        const isCurrent = state.selected === d.id;
+        const card = el("div", { class: "item" + (d.showroom ? " showroom" : ""), role: "listitem" });
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-current", String(isCurrent));
+        if (d.showroom) card.appendChild(el("span", { class: "label" }, "Our showroom"));
+        card.appendChild(el("p", { class: "name" }, d.name));
+        card.appendChild(el("p", { class: "address" }, d.street));
+        card.appendChild(el("p", { class: "address" }, [d.postcode, d.city].filter(Boolean).join(" ") + ", " + d.country));
+        if (d.phone) {
+          const p = el("p", { class: "phone" });
+          p.appendChild(el("a", { href: "tel:" + d.phone.replace(/\s+/g, "") }, d.phone));
+          card.appendChild(p);
+        }
+        const actions = el("div", { class: "actions" });
+        actions.appendChild(el("a", { class: "btn", href: directionsUrl(d), target: "_blank", rel: "noopener" }, "Get directions"));
+        card.appendChild(actions);
+
+        card.addEventListener("click", e => {
+          if (e.target.closest("a")) return;
+          select(d.id, true);
+        });
+        card.addEventListener("keydown", e => {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(d.id, true); }
+        });
+        list.appendChild(card);
+      });
+
+      // Show only markers of the visible list.
+      DEALERS.forEach(d => {
+        const m = markers[d.id];
+        const inList = items.includes(d);
+        if (inList && !map.hasLayer(m)) m.addTo(map);
+        if (!inList && map.hasLayer(m)) map.removeLayer(m);
+      });
+    }
+
+    function fitVisible() {
+      let items = visible();
+      if (items.length === 0) return;
+      // With all countries shown, open on Europe, where most locations are.
+      if (state.country === "all") items = items.filter(d => d.lat > 34 && d.lng > -11 && d.lng < 30);
+      const bounds = L.latLngBounds(items.map(d => [d.lat, d.lng]));
+      map.fitBounds(bounds, { padding: [40, 40], maxZoom: items.length === 1 ? 10 : 7 });
+    }
+
+    function select(id, pan) {
+      const d = DEALERS.find(x => x.id === id);
+      if (!d) return;
+      state.selected = id;
+      // Update marker highlight.
+      DEALERS.forEach(x => markers[x.id].setIcon(markerIcon(x, x.id === id)));
+      const m = markers[id];
+      if (!map.hasLayer(m)) m.addTo(map);
+      if (pan) map.setView([d.lat, d.lng], Math.max(map.getZoom(), 9));
+      m.bindPopup(
+        "<strong>" + d.name.replace(/&/g, "&amp;") + "</strong><br>" +
+        d.street.replace(/&/g, "&amp;") + "<br>" +
+        [d.postcode, d.city].filter(Boolean).join(" ")
+      ).openPopup();
+      renderList();
+      const card = document.querySelector('.item[aria-current="true"]');
+      if (card && pan) card.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+
+    renderFilters();
+    renderList();
+    fitVisible();
+  }
+</script>
+</body>
+</html>
