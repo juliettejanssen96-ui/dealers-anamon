@@ -39,7 +39,7 @@
     margin: 0 0 24px;
     line-height: 0;
   }
-  .wordmark img { display: block; width: 76px; height: auto; }
+  .wordmark img { display: block; width: 140px; height: auto; }
   h1 {
     font-size: 36px;
     font-weight: 500;
@@ -59,16 +59,16 @@
     flex-wrap: wrap;
     gap: 8px;
     padding: 16px 0;
-    border-top: 1px solid var(--sea-blue);
-    border-bottom: 1px solid var(--sea-blue);
+    border-top: 1px solid rgba(24, 48, 71, 0.15);
+    border-bottom: 1px solid rgba(24, 48, 71, 0.15);
     margin-bottom: 20px;
   }
   .chip {
     font: inherit;
     font-size: 14px;
     color: var(--anamon-blue);
-    background: var(--light-blue);
-    border: 1px solid var(--light-blue);
+    background: var(--white);
+    border: 1px solid var(--white);
     border-radius: 999px;
     padding: 6px 14px;
     cursor: pointer;
@@ -107,17 +107,15 @@
     font: inherit;
     color: inherit;
     background: var(--white);
-    border: 1px solid var(--sea-blue);
+    border: none;
     border-radius: var(--radius);
-    padding: 16px;
+    padding: 20px;
     margin-bottom: 12px;
     cursor: pointer;
   }
   .item[aria-current="true"] {
-    border-color: var(--anamon-blue);
-    box-shadow: inset 3px 0 0 var(--anamon-blue);
+    box-shadow: inset 3px 0 0 var(--ochre-yellow);
   }
-  .item.showroom { background: var(--light-blue); }
   .item .name {
     font-size: 17px;
     font-weight: 500;
@@ -149,8 +147,8 @@
     color: var(--white);
     background: var(--anamon-blue);
     border: 1px solid var(--anamon-blue);
-    border-radius: var(--radius);
-    padding: 8px 14px;
+    border-radius: 999px;
+    padding: 9px 20px;
     text-decoration: none;
     cursor: pointer;
   }
@@ -158,17 +156,19 @@
   #map {
     height: 640px;
     width: 100%;
-    border: 1px solid var(--sea-blue);
+    border: none;
     border-radius: var(--radius);
-    background: var(--light-blue);
+    background: var(--white);
   }
   .empty {
     padding: 24px;
     background: var(--white);
-    border: 1px solid var(--sea-blue);
+    border: none;
     border-radius: var(--radius);
   }
   .leaflet-container a { color: var(--anamon-blue); }
+  /* Muted greyscale base map; markers keep the brand colours. */
+  .leaflet-tile-pane { filter: grayscale(1) contrast(0.85) brightness(1.06); }
   .marker-dot {
     width: 14px;
     height: 14px;
@@ -194,7 +194,7 @@
   }
   .btn-secondary {
     color: var(--anamon-blue);
-    background: var(--white);
+    background: transparent;
   }
   dialog {
     width: min(560px, calc(100vw - 32px));
@@ -238,6 +238,9 @@
   .privacy { font-size: 13px; margin: 16px 0 0; }
   .form-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
   .form-status { font-size: 15px; margin: 14px 0 0; }
+  .stock-list { list-style: none; margin: 0; padding: 0; }
+  .stock-list li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(24, 48, 71, 0.15); }
+  .stock-empty { margin: 0; }
   .form-status.error { color: #a1442f; }
   .btn[disabled] { opacity: 0.6; cursor: default; }
   @media (max-width: 520px) {
@@ -254,7 +257,7 @@
 <body>
 
 <header>
-  <p class="wordmark"><img src="logo.png" alt="Royal Botania" width="76" height="40"></p>
+  <p class="wordmark"><img src="logo.svg" alt="Anamon" width="140" height="22"></p>
   <h1>Find an Anamon near you.</h1>
   <p class="intro">Visit our showroom in Wommelgem, or see <em>Anamon</em> in person at one of our dealers. Choose a country to see the locations nearby.</p>
 </header>
@@ -327,6 +330,15 @@
   </div>
 </dialog>
 
+<dialog id="stock" aria-labelledby="stock-title">
+  <div class="dialog-inner">
+    <button class="close" type="button" id="stock-close" aria-label="Close">&times;</button>
+    <h2 id="stock-title">Stock</h2>
+    <p class="lead" id="stock-dealer"></p>
+    <div id="stock-body"></div>
+  </div>
+</dialog>
+
 <footer>
   <p>Anamon is a product by Royal Botania.</p>
 </footer>
@@ -343,6 +355,13 @@
     .catch(() => {
       document.getElementById("count").textContent = "The locations could not be loaded. Please try again later.";
     });
+
+  function el(tag, attrs, text) {
+    const e = document.createElement(tag);
+    if (attrs) Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v));
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
 
   function init() {
     // Give every dealer an id, in list order.
@@ -369,13 +388,6 @@
       m.on("click", () => select(d.id, false));
       markers[d.id] = m;
     });
-
-    function el(tag, attrs, text) {
-      const e = document.createElement(tag);
-      if (attrs) Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v));
-      if (text !== undefined) e.textContent = text;
-      return e;
-    }
 
     function directionsUrl(d) {
       return "https://www.google.com/maps/dir/?api=1&destination=" + d.lat + "," + d.lng;
@@ -435,7 +447,10 @@
           book.addEventListener("click", openAppointment);
           actions.appendChild(book);
         }
-        actions.appendChild(el("a", { class: "btn" + (d.showroom ? " btn-secondary" : ""), href: directionsUrl(d), target: "_blank", rel: "noopener" }, "Get directions"));
+        const stockBtn = el("button", { class: "btn btn-secondary", type: "button" }, "View stock");
+        stockBtn.addEventListener("click", e => openStock(d, e.currentTarget));
+        actions.appendChild(stockBtn);
+        actions.appendChild(el("a", { class: "btn btn-secondary", href: directionsUrl(d), target: "_blank", rel: "noopener" }, "Get directions"));
         card.appendChild(actions);
 
         card.addEventListener("click", e => {
@@ -490,6 +505,33 @@
     renderList();
     fitVisible();
   }
+
+  // Stock per location. Fill "stock" in dealers.json as [{ "name": "Anamon ...", "qty": 2 }].
+  const stockDialog = document.getElementById("stock");
+  let stockOpener = null;
+  function openStock(d, btn) {
+    stockOpener = btn;
+    document.getElementById("stock-title").textContent = "Stock at " + d.name;
+    document.getElementById("stock-dealer").textContent = [d.street, [d.postcode, d.city].filter(Boolean).join(" ")].join(", ");
+    const body = document.getElementById("stock-body");
+    body.innerHTML = "";
+    if (Array.isArray(d.stock) && d.stock.length) {
+      const ul = el("ul", { class: "stock-list" });
+      d.stock.forEach(s => {
+        const li = el("li");
+        li.appendChild(el("span", null, s.name));
+        if (s.qty !== undefined) li.appendChild(el("span", null, String(s.qty)));
+        ul.appendChild(li);
+      });
+      body.appendChild(ul);
+    } else {
+      body.appendChild(el("p", { class: "stock-empty" }, "Stock information for this location is not available yet. Please contact the location directly."));
+    }
+    stockDialog.showModal();
+  }
+  stockDialog.addEventListener("close", () => { if (stockOpener) stockOpener.focus(); });
+  document.getElementById("stock-close").addEventListener("click", () => stockDialog.close());
+  stockDialog.addEventListener("click", e => { if (e.target === stockDialog) stockDialog.close(); });
 
   // Showroom appointment form.
   const dialog = document.getElementById("appointment");
